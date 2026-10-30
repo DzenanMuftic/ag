@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Name Greeting App</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #6366f1;
+      --accent2: #22d3ee;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      padding: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+    .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+    .greeting {
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .greeting .placeholder { color: var(--muted); font-weight: 400; font-size: 0.95rem; }
+
+    .greeting .name {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    form { display: flex; gap: 0.6rem; }
+
+    input {
+      flex: 1;
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input::placeholder { color: #64748b; }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
+    }
+
+    button {
+      padding: 0.85rem 1.3rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+
+    button:hover { opacity: 0.9; }
+    button:active { transform: scale(0.96); }
+
+    .clear-btn {
+      margin-top: 0.8rem;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-decoration: underline;
+      padding: 0.4rem;
+    }
+
+    .clear-btn:hover { color: var(--text); opacity: 1; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="badge">Live from the internet</span>
+    <h1>👋 Welcome</h1>
+    <p class="subtitle">Enter your name below to see it on screen.</p>
+
+    <div class="greeting" id="greeting">
+      <span class="placeholder">Your name will appear here…</span>
+    </div>
+
+    <form id="nameForm" autocomplete="off">
+      <input
+        type="text"
+        id="nameInput"
+        placeholder="Type your name"
+        aria-label="Your name"
+        maxlength="60"
+      />
+      <button type="submit">Enter</button>
+    </form>
+    <button type="button" class="clear-btn" id="clearBtn">Clear</button>
+  </main>
+
+  <script>
+    const form = document.getElementById("nameForm");
+    const input = document.getElementById("nameInput");
+    const greeting = document.getElementById("greeting");
+    const clearBtn = document.getElementById("clearBtn");
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showName(name) {
+      greeting.innerHTML = `Hello, <span class="name">${escapeHtml(name)}</span>! 🎉`;
+    }
+
+    function resetGreeting() {
+      greeting.innerHTML = `<span class="placeholder">Your name will appear here…</span>`;
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const name = input.value.trim();
+      if (name) {
+        showName(name);
+        input.value = "";
+      }
+    });
+
+    clearBtn.addEventListener("click", function () {
+      input.value = "";
+      resetGreeting();
+    });
+
+    input.focus();
+  </script>
+</body>
+</html>
